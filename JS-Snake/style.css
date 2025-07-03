@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  font-family: monospace;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background-color: #3d6953;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#platform-boundary {
+  width: 610px;
+  height: 610px;
+  background-color: #78785f;
+  border-radius: 10px;
+  box-shadow: inset 0 0 15px 5px #284537;
+  border: 4px solid #284537;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.cell {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.apple {
+  background-color: #b54242;
+  border: 4px solid #7b2e2e;
+}
+
+.snake {
+  background-color: #4d8267;
+  border: 4px solid #284537;
+  z-index: 9;
+}
+
+.head {
+  background-color: #385e4b;
+  border: 4px solid #14221c;
+  z-index: 10;
+}
+
+.title {
+  color: #b7b76e;
+  font-size: 50px;
+}
+
+h2 {
+  color: #b7b76e;
+}
+
+footer {
+  color: #14221c;
+  position: absolute;
+  font-size: 20px;
+  bottom: 20px;
+}

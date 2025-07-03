@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POKEGRAM</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>POKEGRAM</h1>
+      <form
+        onsubmit="fetchPokemon(event)"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 5px;
+        "
+        autocomplete="off"
+      >
+        <input
+          type="text"
+          id="pokemon-input"
+          placeholder="Enter Pokemon"
+          required
+        />
+        <ul class="display" id="suggestions"></ul>
+      </form>
+
+      <div class="card-container">
+        <div class="card-header">
+          <div class="card-header-thumbnail-wrapper">
+            <div class="card-thumbnail-border">
+              <img id="card-thumbnail" src="src/placeholder.jpg" alt="" />
+            </div>
+            <span id="card-username">User Name</span>
+          </div>
+          <img class="card-icons btn" src="src/ellipsis.png" alt="" />
+        </div>
+        <div class="card-img-container">
+          <img id="card-img" src="src/placeholder.jpg" alt="" />
+          <img
+            class="card-icons img-icons users-icon btn"
+            src="src/user.png"
+            alt=""
+          />
+          <img
+            id="audio"
+            class="card-icons img-icons volume-icon btn"
+            src="src/audio.png"
+            alt=""
+          />
+        </div>
+        <div class="card-footer-container">
+          <div class="card-footer-btns">
+            <div class="card-footer-left">
+              <div class="footer-btn btn">
+                <img class="card-icons" src="src/xp.png" alt="" />
+                <span id="card-likes">0</span>
+              </div>
+              <div class="footer-btn btn">
+                <img class="card-icons" src="src/height.png" alt="" />
+                <span id="card-coments">0</span>
+              </div>
+              <div class="footer-btn btn">
+                <img class="card-icons" src="src/weight.png" alt="" />
+                <span id="card-shares">0</span>
+              </div>
+            </div>
+            <img class="card-icons btn" src="src/bookmark.png" alt="" />
+          </div>
+          <div class="card-footer-description">
+            <span id="card-footer-username">User Name</span>
+            <span id="card-footer-coment">This is a coment</span>
+          </div>
+        </div>
+      </div>
+      <p>Pere Albertí Aguiló</p>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
