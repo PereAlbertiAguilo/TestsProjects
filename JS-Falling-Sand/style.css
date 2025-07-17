@@ -20,7 +20,7 @@ body {
 }
 
 #container {
-  width: 600px;
+  width: 1000px;
   height: 600px;
   background-color: #fff;
   position: relative;
@@ -38,4 +38,9 @@ footer {
   position: absolute;
   font-size: 15px;
   bottom: 20px;
+
+  background: linear-gradient(to right, red, green, blue);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

@@ -1,6 +1,6 @@
 const container = document.getElementById("container");
 
-const width = 60;
+const width = 100;
 const height = 60;
 const cellSize = 10;
 
@@ -17,38 +17,41 @@ function start() {
   update();
 
   // When the mouse moves over or clicks the container updates the
-  // cell that its over to a sand cell if it wasn't sand allready
-  container.addEventListener("mouseover", (e) => {
-    const cellPos = getCellPos(e.target);
-    if (getCell(cellPos.x, cellPos.y).state === 0)
-      updateCell(cellPos.x, cellPos.y, 1, col);
+  // cell its over to a sand cell if it wasn't sand allready
+  ["mousemove", "mousedown"].forEach((listener) => {
+    container.addEventListener(listener, (e) => {
+      const cellPos = getCellPos(e.target);
+      if (getCell(cellPos.x, cellPos.y).state === 0)
+        updateCell(cellPos.x, cellPos.y, 1, col);
+    });
   });
-  container.addEventListener("mousedown", (e) => {
-    const cellPos = getCellPos(e.target);
-    if (getCell(cellPos.x, cellPos.y).state === 0)
-      updateCell(cellPos.x, cellPos.y, 1, col);
+
+  // When the mouse enters the container starts the changeing hue
+  // interval, and when the mouse exits the container stops the interval
+  let hueInterval;
+  container.addEventListener("mouseenter", () => {
+    // Every 100 ms changes the hue of a color
+    hueInterval = setInterval(() => {
+      hue++;
+      col = `hsl(${hue}, 50%, 50%)`;
+    }, 100);
   });
+  container.addEventListener("mouseleave", () => clearInterval(hueInterval));
 }
 
-// All the intervals that updates the sim
+// Sets an update loop with an interval
 function update() {
   setInterval(() => {
     updateGrid();
   }, 20);
-
-  // Every 100 ms changes the hue of a color
-  setInterval(() => {
-    hue++;
-    col = `hsl(${hue}, 50%, 50%)`;
-  }, 100);
 }
 
 // Generates a 2 dimensional grid and generates an empty
 // cell in all its positions
 function createGrid() {
-  for (let y = 0; y < width; y++) {
+  for (let y = 0; y < height; y++) {
     grid.push([]);
-    for (let x = 0; x < height; x++) {
+    for (let x = 0; x < width; x++) {
       grid[y].push({ state: 0, cell: createCell(x, y) });
     }
   }
