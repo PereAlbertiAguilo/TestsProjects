@@ -1,11 +1,13 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const defaultCol = "#69a2ff";
+const defaultCol = "#9b69ffff";
+const defaultLineWidth = 4;
 const curveSampleOffset = 0.01;
 
 let curve = [];
 let currPoint = 0;
+let curveDrawing = false;
 
 window.onresize = () => window.location.reload();
 window.onload = start;
@@ -13,14 +15,13 @@ window.onload = start;
 // Logic called when the window is loaded
 function start() {
   resize();
-
-  ctx.strokeStyle = defaultCol;
-  ctx.lineWidth = 2;
+  setContextToDefault();
 
   // Draws title texts
   ctx.fillStyle = "white";
   createText("Bézier Curves", (yOffset = 80), (fontSize = 40));
   createText("(Click to add points)", (yOffset = 110), (fontSize = 15));
+  createText("(4 points = curve)", (yOffset = 130), (fontSize = 15));
   createText(
     "Pere Albertí Aguiló",
     (yOffset = window.innerHeight - 30),
@@ -28,10 +29,21 @@ function start() {
   );
 
   document.addEventListener("mousedown", (e) => {
+    if (curveDrawing) return;
     curve[currPoint] = { x: e.clientX, y: e.clientY };
-    createPoint(curve[currPoint].x, curve[currPoint].y);
+    createPoint(curve[currPoint]);
     currPoint++;
-
+    switch (curve.length) {
+      case 2:
+        createLine(curve[0], curve[1], (isDoted = true));
+        break;
+      case 3:
+        createLine(curve[1], curve[2], (isDoted = true));
+        break;
+      case 4:
+        createLine(curve[2], curve[3], (isDoted = true));
+        break;
+    }
     if (curve.length === 4) {
       createCurve(...curve);
       currPoint = 0;
@@ -46,6 +58,15 @@ function resize() {
   ctx.canvas.height = window.innerHeight;
 }
 
+// Default context styles
+function setContextToDefault() {
+  ctx.strokeStyle = defaultCol;
+  ctx.lineWidth = defaultLineWidth;
+  ctx.setLineDash([]);
+  ctx.lineCap = "round";
+  ctx.globalCompositeOperation = "destination-over";
+}
+
 // Draws a text center justified with a given size
 function createText(text, yOffset, fontSize) {
   ctx.font = fontSize + "px monospace";
@@ -55,9 +76,9 @@ function createText(text, yOffset, fontSize) {
 }
 
 // Draws a point to a specified x and y coord
-function createPoint(x, y) {
+function createPoint(P, radius = 8) {
   ctx.beginPath();
-  ctx.arc(x, y, (radius = 6), 0, 2 * Math.PI);
+  ctx.arc(P.x, P.y, radius, 0, 2 * Math.PI);
   ctx.fillStyle = "black";
   ctx.fill();
   ctx.stroke();
@@ -65,10 +86,11 @@ function createPoint(x, y) {
 
 // Draws a Line from one point (x , y) to another
 // with a point at the start and end positions
-function createLine(P1, P2, doted = false) {
-  if (doted) {
+function createLine(P1, P2, isDoted = false) {
+  if (isDoted) {
     ctx.setLineDash([10, 15]);
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "#ffffff80";
+    ctx.lineWidth = Math.floor(defaultLineWidth / 2);
   }
 
   ctx.beginPath();
@@ -76,11 +98,7 @@ function createLine(P1, P2, doted = false) {
   ctx.lineTo(P2.x, P2.y);
   ctx.stroke();
 
-  ctx.setLineDash([]);
-  ctx.strokeStyle = defaultCol;
-
-  createPoint(P1.x, P1.y);
-  createPoint(P2.x, P2.y);
+  setContextToDefault();
 }
 
 // Calculates an x and y position given 4 points
@@ -102,26 +120,27 @@ function bezierPos(P1, P2, P3, P4, t) {
 
 // Draws a cubic bézier curve given 4 points
 function createCurve(P1, P2, P3, P4) {
+  curveDrawing = true;
+
   let t = 0;
   ctx.beginPath();
-  const startPos = bezierPos(P1, P2, P3, P4, t);
-  ctx.moveTo(startPos.x, startPos.y);
+  ctx.moveTo(P1.x, P1.y);
 
   // Interpolates the t value from 0 to 1 by a
-  // curveSampleOffset constant
-  while (t < 1) {
+  // curveSampleOffset constant with a Interval
+  // set to ≈ 60 fps
+  let drawInterval = setInterval(() => {
+    if (t >= 1) {
+      t = 1;
+      ctx.lineTo(P4.x, P4.y);
+      ctx.stroke();
+      clearInterval(drawInterval);
+      curveDrawing = false;
+      return;
+    }
     const pos = bezierPos(P1, P2, P3, P4, t);
     ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
     t += curveSampleOffset;
-  }
-
-  t = 1;
-  const endPos = bezierPos(P1, P2, P3, P4, t);
-  ctx.lineTo(endPos.x, endPos.y);
-  ctx.stroke();
-
-  // Draws doted lines from the P1 to P2 and from P3 to P4
-  // once the curve is drawn
-  createLine(P1, P2, (doted = true));
-  createLine(P3, P4, (doted = true));
+  }, 16);
 }
