@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>SLE</title>
+  </head>
+  <body>
+    <div class="matrix-header">
+      <h5>Square matrix size</h5>
+      <h5 id="sizer-display">2</h5>
+    </div>
+    <br />
+    <div id="container">
+      <div id="matrix-holder"></div>
+      <div id="lu-holder"></div>
+      <div id="res-holder"></div>
+    </div>
+    <div class="buttons">
+      <div id="settings-container">
+        <div class="sizer-container">
+          <input
+            name="sizer"
+            id="sizer"
+            type="range"
+            min="2"
+            max="8"
+            value="2"
+          />
+
+          <div class="checkbox-container">
+            <h6>Round Result</h6>
+            <input
+              type="checkbox"
+              id="error-correction"
+              class="checkbox-elem"
+            />
+          </div>
+          <form id="matrix-builder-form">
+            <fieldset>
+              <div class="radio-fieldset">
+                <h5>Choose a method</h5>
+                <div class="radio-container">
+                  <div class="checkbox-container">
+                    <h6>Gauss</h6>
+                    <input
+                      class="radio-elem"
+                      type="radio"
+                      name="gauss-method"
+                      id="gauss-method"
+                      checked
+                    />
+                  </div>
+                  <div class="checkbox-container">
+                    <h6>Partial Pivoting</h6>
+                    <input
+                      class="radio-elem"
+                      type="radio"
+                      name="gauss-method"
+                      id="partial-pivoting-method"
+                    />
+                  </div>
+                  <div class="checkbox-container">
+                    <h6>Complete Pivoting</h6>
+                    <input
+                      class="radio-elem"
+                      type="radio"
+                      name="gauss-method"
+                      id="complete-pivoting-method"
+                    />
+                  </div>
+                </div>
+                <button type="submit">Create Matrix</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+      <button class="hide" id="inputs-getter">Submit Data</button>
+      <button class="hide" id="triangultor">Triangulate</button>
+      <button class="hide" id="solver">Solve</button>
+      <button class="hide" id="result-checker">Check Result A*X</button>
+      <button class="hide" id="matrix-remover">Erase Matrix</button>
+    </div>
+
+    <footer>Pere Albertí Aguiló</footer>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
